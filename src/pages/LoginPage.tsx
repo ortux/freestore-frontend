@@ -1,5 +1,6 @@
 import { Github, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { config } from '../config';
 
 export default function LoginPage() {
   const error = new URLSearchParams(window.location.search).get('error');
@@ -25,7 +26,7 @@ export default function LoginPage() {
         {/* Card */}
         <div className="card p-5 space-y-4">
           <a
-            href="/auth/github"
+            href={config.githubLoginUrl}
             className="flex items-center justify-center gap-2.5 w-full py-2 bg-[#1a1a1a] hover:bg-[#222]
               border border-[#333] hover:border-[#555] rounded-md text-sm text-[#ededed] font-medium
               transition-all"

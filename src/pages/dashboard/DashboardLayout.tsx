@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '../../hooks/useUser';
-import { api } from '../../api/client';
+import { authApi } from '../../api/client';
 import { Avatar } from '../../components/ui/Avatar';
 import toast from 'react-hot-toast';
 
@@ -30,7 +30,7 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
 
   const logout = async () => {
     try {
-      await api.post('/auth/logout');
+      await authApi.post('/auth/logout');
       qc.clear();
       navigate('/login');
     } catch {

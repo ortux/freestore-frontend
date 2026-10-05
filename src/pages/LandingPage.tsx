@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Shield, Github, Lock, ArrowRight, CheckCircle } from 'lucide-react';
+import { config } from '../config';
 
 export default function LandingPage() {
   return (
@@ -15,7 +16,7 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-4">
             <Link to="/docs" className="text-xs text-[#666] hover:text-[#ededed] transition-colors">Docs</Link>
-            <a href="/auth/github" className="btn-primary btn-sm">Sign in</a>
+            <a href={config.githubLoginUrl} className="btn-primary btn-sm">Sign in</a>
           </div>
         </div>
       </nav>
@@ -33,7 +34,7 @@ export default function LandingPage() {
           The repository contains only ciphertext — never your original files.
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <a href="/auth/github" className="btn-primary gap-2">
+          <a href={config.githubLoginUrl} className="btn-primary gap-2">
             <Github className="w-4 h-4" /> Get started with GitHub
           </a>
           <Link to="/docs" className="btn-secondary gap-2">
