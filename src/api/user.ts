@@ -1,0 +1,30 @@
+import { api } from './client';
+
+export interface UserProfile {
+  id: string;
+  githubUsername: string;
+  email: string | null;
+  repositoryName: string | null;
+  repositoryOwner: string | null;
+  createdAt: string;
+  stats: { fileCount: number; totalBytes: number };
+}
+
+export interface Repository {
+  name: string;
+  owner: string;
+  url: string;
+  size?: number;
+  visibility: string;
+  encryption: string;
+}
+
+export async function getUser(): Promise<UserProfile> {
+  const { data } = await api.get('/user');
+  return data.data;
+}
+
+export async function getRepository(): Promise<Repository> {
+  const { data } = await api.get('/user/repository');
+  return data.data;
+}
