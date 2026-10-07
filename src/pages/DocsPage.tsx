@@ -5,24 +5,26 @@ const BASE = 'https://your-domain.com';
 
 export default function DocsPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <nav className="border-b border-slate-800 px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <Link to="/" className="text-slate-400 hover:text-slate-100 flex items-center gap-2 text-sm">
+    <div className="min-h-screen bg-black text-[#ededed]">
+      <nav className="border-b border-[#1a1a1a] px-6 py-3.5">
+        <div className="max-w-5xl mx-auto flex items-center gap-4">
+          <Link to="/" className="text-[#666] hover:text-[#ededed] flex items-center gap-2 text-sm transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-brand-400" />
-            <span className="font-semibold">API Documentation</span>
+            <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
+              <Shield className="w-3.5 h-3.5 text-black" />
+            </div>
+            <span className="text-sm font-semibold">API Documentation</span>
           </div>
         </div>
       </nav>
 
       <div className="max-w-4xl mx-auto px-6 py-12 space-y-12">
         <div>
-          <h1 className="text-3xl font-bold mb-3">Free Store API</h1>
-          <p className="text-slate-400">
+          <h1 className="text-3xl font-bold mb-3 tracking-tight text-white">Free Store API</h1>
+          <p className="text-[#666]">
             All API endpoints require authentication via session cookie or Bearer API key.
             Files are encrypted server-side before being stored in GitHub.
           </p>
@@ -30,8 +32,8 @@ export default function DocsPage() {
 
         {/* Authentication */}
         <Section title="Authentication">
-          <p className="text-slate-400 text-sm mb-4">
-            Use <code className="text-brand-400">Authorization: Bearer sk_live_...</code> header or
+          <p className="text-[#888] text-sm mb-4">
+            Use <code className="text-white">Authorization: Bearer sk_live_...</code> header or
             a valid session cookie obtained via GitHub OAuth.
           </p>
           <CodeBlock>{`Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`}</CodeBlock>
@@ -209,8 +211,8 @@ fetch("${BASE}/api/v1/files/f_8f92kd71?inline=1", {
               ['DECRYPTION_FAILED', '500 — File could not be decrypted'],
             ].map(([code, desc]) => (
               <div key={code} className="flex gap-3">
-                <code className="text-brand-400 text-xs w-48 shrink-0">{code}</code>
-                <span className="text-slate-400 text-xs">{desc}</span>
+                <code className="text-[#ccc] text-xs w-48 shrink-0">{code}</code>
+                <span className="text-[#666] text-xs">{desc}</span>
               </div>
             ))}
           </div>
@@ -223,7 +225,7 @@ fetch("${BASE}/api/v1/files/f_8f92kd71?inline=1", {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4 pb-2 border-b border-slate-800">{title}</h2>
+      <h2 className="text-xl font-semibold mb-4 pb-2 border-b border-[#1a1a1a] text-[#ededed]">{title}</h2>
       {children}
     </section>
   );
@@ -243,17 +245,17 @@ function Endpoint({
   response?: string;
 }) {
   const colors: Record<string, string> = {
-    GET: 'text-emerald-400 bg-emerald-500/10',
-    POST: 'text-brand-400 bg-brand-500/10',
-    DELETE: 'text-red-400 bg-red-500/10',
+    GET: 'text-white bg-[#1a1a1a] border border-[#333]',
+    POST: 'text-[#ccc] bg-[#111] border border-[#2e2e2e]',
+    DELETE: 'text-[#888] bg-[#111] border border-[#2e2e2e]',
   };
   return (
     <div>
       <div className="flex items-center gap-3 mb-2">
         <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${colors[method]}`}>{method}</span>
-        <code className="text-slate-200 font-mono text-sm">{path}</code>
+        <code className="text-[#ededed] font-mono text-sm">{path}</code>
       </div>
-      <p className="text-slate-400 text-sm mb-3">{description}</p>
+      <p className="text-[#777] text-sm mb-3">{description}</p>
       {request && <CodeBlock label="Request">{request}</CodeBlock>}
       {response && <CodeBlock label="Response">{response}</CodeBlock>}
     </div>
@@ -263,8 +265,8 @@ function Endpoint({
 function CodeBlock({ children, label }: { children: string; label?: string }) {
   return (
     <div className="mb-3">
-      {label && <p className="text-xs text-slate-500 mb-1">{label}</p>}
-      <pre className="bg-slate-900 rounded-lg p-4 text-xs text-slate-300 overflow-x-auto font-mono border border-slate-800">
+      {label && <p className="text-xs text-[#555] mb-1">{label}</p>}
+      <pre className="bg-[#0a0a0a] rounded-lg p-4 text-xs text-[#aaa] overflow-x-auto font-mono border border-[#222] leading-relaxed">
         {children}
       </pre>
     </div>
