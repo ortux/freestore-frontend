@@ -108,17 +108,41 @@ export default function DocsPage() {
             <Endpoint
               method="GET"
               path="/api/v1/files/:id"
-              description="Download and decrypt a file. Returns the original file with correct Content-Type."
-              request={`curl -o photo.png \\
-  -H "Authorization: Bearer sk_live_xxxx" \\
-  ${BASE}/api/v1/files/f_8f92kd71`}
+              description="Download and decrypt a file. Returns the original file with its Content-Type. Add ?inline=1 to display a PDF inline; other files are returned as attachments. File content routes require an authenticated session cookie."
+              request={`curl -b "connect.sid=<session-cookie>" -o photo.png \\
+  ${BASE}/api/v1/files/f_8f92kd71
+
+// To preview a PDF, fetch it with the signed-in browser session:
+fetch("${BASE}/api/v1/files/f_8f92kd71?inline=1", {
+  credentials: "include"
+})
+  .then((response) => {
+    if (!response.ok) throw new Error("File request failed");
+    return response.blob();
+  })
+  .then((blob) => {
+    const previewUrl = URL.createObjectURL(blob);
+    document.querySelector("iframe").src = previewUrl;
+    // Revoke previewUrl when the preview is closed.
+  });`}
             />
 
             <Endpoint
               method="GET"
               path="/api/v1/images/:id"
-              description="Serve a decrypted image. Use directly in <img> src after authenticating via cookie."
-              request={`<img src="${BASE}/api/v1/images/f_8f92kd71" />`}
+              description="Serve decrypted image bytes. This route requires an authenticated session cookie. A direct <img> URL works only when the browser sends that cookie to this API origin; otherwise, fetch the image with credentials and display a temporary object URL."
+              request={`fetch("${BASE}/api/v1/images/f_8f92kd71", {
+  credentials: "include"
+})
+  .then((response) => {
+    if (!response.ok) throw new Error("Image request failed");
+    return response.blob();
+  })
+  .then((blob) => {
+    const imageUrl = URL.createObjectURL(blob);
+    document.querySelector("img").src = imageUrl;
+    // Revoke imageUrl when the image is no longer needed.
+  });`}
             />
 
             <Endpoint
