@@ -1,34 +1,67 @@
 import { Link } from 'react-router-dom';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 const BASE = 'https://your-domain.com';
 
 export default function DocsPage() {
   return (
     <div className="min-h-screen bg-black text-[#ededed]">
-      <nav className="border-b border-[#1a1a1a] px-6 py-3.5">
-        <div className="max-w-5xl mx-auto flex items-center gap-4">
-          <Link to="/" className="text-[#666] hover:text-[#ededed] flex items-center gap-2 text-sm transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </Link>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
-              <Shield className="w-3.5 h-3.5 text-black" />
+      <nav className="sticky top-0 z-40 h-16 border-b border-[#1a1a1a] bg-black px-6">
+        <div className="flex h-full items-center justify-between gap-6">
+          <div className="flex min-w-0 items-center gap-5">
+            <Link to="/" aria-label="Free Store home" className="flex shrink-0 items-center gap-2">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-white">
+                <Shield className="h-3.5 w-3.5 text-black" />
+              </div>
+              <span className="text-sm font-semibold text-white">Free Store</span>
+            </Link>
+            <span className="hidden text-[#333] sm:inline">/</span>
+            <span className="hidden text-sm font-medium text-[#888] sm:inline">Docs</span>
+            <div className="hidden items-center gap-5 pl-2 text-xs text-[#777] md:flex">
+              <a href="#endpoints" className="transition-colors hover:text-white">API reference</a>
+              <a href="#authentication" className="transition-colors hover:text-white">Authentication</a>
+              <a href="#error-format" className="transition-colors hover:text-white">Errors</a>
             </div>
-            <span className="text-sm font-semibold">API Documentation</span>
           </div>
+          <Link to="/dashboard" className="btn-secondary btn-sm shrink-0">Dashboard</Link>
         </div>
       </nav>
 
-      <div className="max-w-4xl mx-auto px-6 py-12 space-y-12">
-        <div>
-          <h1 className="text-3xl font-bold mb-3 tracking-tight text-white">Free Store API</h1>
+      <div className="mx-auto grid max-w-[1600px] grid-cols-1 lg:grid-cols-[240px_minmax(0,1fr)_200px]">
+        <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] overflow-y-auto border-r border-[#1a1a1a] px-5 py-8 lg:block">
+          <p className="mb-4 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#555]">API reference</p>
+          <nav aria-label="Documentation sections" className="space-y-1">
+            <DocNavLink href="#overview" label="Overview" />
+            <DocNavLink href="#api-basics" label="Getting started" />
+            <DocNavLink href="#authentication" label="Authentication" />
+            <DocNavLink href="#endpoints" label="Endpoints" />
+            <DocNavLink href="#error-format" label="Errors" />
+          </nav>
+          <div className="mt-8 border-t border-[#1a1a1a] pt-5">
+            <p className="px-3 text-xs leading-5 text-[#555]">Encrypted file storage, backed by GitHub.</p>
+          </div>
+        </aside>
+
+        <main className="min-w-0 px-6 py-10 sm:px-10 lg:px-12 lg:py-14">
+        <div id="overview" className="mb-12 scroll-mt-24">
+          <div className="mb-8 flex items-center gap-2 text-xs text-[#777]">
+            <span className="text-[#555]">APIs &amp; SDKs</span>
+            <span className="text-[#444]">/</span>
+            <span>Free Store API</span>
+          </div>
+          <h1 className="text-4xl font-semibold mb-6 tracking-tight text-white sm:text-5xl">Using the Free Store API</h1>
           <p className="text-[#666]">
             All API endpoints require authentication via session cookie or Bearer API key.
             Files are encrypted server-side before being stored in GitHub.
           </p>
         </div>
+
+        <section id="api-basics" className="mb-12 scroll-mt-24">
+          <h2 className="mb-4 text-2xl font-semibold tracking-tight text-white">API basics</h2>
+          <p className="text-sm leading-6 text-[#aaa]">
+            All endpoints are served under <code className="rounded border border-[#333] bg-[#151515] px-1.5 py-0.5 font-mono text-xs text-[#ddd]">{BASE}/api/v1</code> and return JSON unless an endpoint streams file content.
+          </p>
+        </section>
 
         {/* Authentication */}
         <Section title="Authentication">
@@ -217,17 +250,46 @@ fetch("${BASE}/api/v1/files/f_8f92kd71?inline=1", {
             ))}
           </div>
         </Section>
+        </main>
+
+        <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] overflow-y-auto px-6 py-10 xl:block">
+          <p className="mb-4 text-xs font-medium text-[#666]">On this page</p>
+          <nav aria-label="On this page" className="space-y-1 border-l border-[#222]">
+            <DocTocLink href="#overview" label="Overview" />
+            <DocTocLink href="#api-basics" label="API basics" />
+            <DocTocLink href="#authentication" label="Authentication" />
+            <DocTocLink href="#endpoints" label="Endpoints" />
+            <DocTocLink href="#error-format" label="Errors" />
+          </nav>
+        </aside>
       </div>
     </div>
   );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  const id = title.toLowerCase().replace(/\s+/g, '-');
   return (
-    <section>
-      <h2 className="text-xl font-semibold mb-4 pb-2 border-b border-[#1a1a1a] text-[#ededed]">{title}</h2>
+    <section id={id} className="mb-12 scroll-mt-24">
+      <h2 className="mb-5 border-b border-[#1a1a1a] pb-3 text-2xl font-semibold tracking-tight text-white">{title}</h2>
       {children}
     </section>
+  );
+}
+
+function DocNavLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a href={href} className="block rounded-md px-3 py-2 text-sm text-[#888] transition-colors hover:bg-[#151515] hover:text-white">
+      {label}
+    </a>
+  );
+}
+
+function DocTocLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a href={href} className="block border-l border-transparent py-1.5 pl-4 text-xs text-[#777] transition-colors hover:border-white hover:text-white">
+      {label}
+    </a>
   );
 }
 
