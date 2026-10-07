@@ -3,6 +3,7 @@ import { useUser } from './hooks/useUser';
 
 import LandingPage     from './pages/LandingPage';
 import LoginPage       from './pages/LoginPage';
+import DocsPage        from './pages/DocsPage';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import OverviewPage    from './pages/dashboard/OverviewPage';
 import FilesPage       from './pages/dashboard/FilesPage';
@@ -39,6 +40,7 @@ export default function App() {
       <Routes>
         <Route path="/"      element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/docs"  element={<DocsPage />} />
         <Route path="/share/:token" element={<PublicSharePage />} />
 
         <Route
