@@ -4,6 +4,9 @@ import { config } from '../config';
 
 export default function LoginPage() {
   const error = new URLSearchParams(window.location.search).get('error');
+  const errorMessage = error === 'github_oauth_failed'
+    ? 'GitHub sign-in could not be completed. Please check the OAuth app configuration and try again.'
+    : error ? 'Authentication failed. Please try again.' : null;
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
@@ -17,9 +20,9 @@ export default function LoginPage() {
           <p className="text-xs text-[#555]">Sign in to access your encrypted storage</p>
         </div>
 
-        {error && (
+        {errorMessage && (
           <div className="card border-red-500/20 bg-red-500/5 px-4 py-3 text-xs text-red-400 text-center">
-            Authentication failed. Please try again.
+            {errorMessage}
           </div>
         )}
 
