@@ -1,11 +1,10 @@
 const env = import.meta.env;
-const apiBaseUrl = env.VITE_API_BASE_URL ?? '/api/v1';
-const apiOrigin = /^https?:\/\//i.test(apiBaseUrl) ? new URL(apiBaseUrl).origin : '';
+const apiBaseUrl = '/api/v1';
 
 export const config = {
   apiBaseUrl,
-  authBaseUrl: apiOrigin,
-  githubLoginUrl: `${apiOrigin}/auth/github`,
+  authBaseUrl: '',
+  githubLoginUrl: '/auth/github',
   maxFileSizeMb: Number(env.VITE_MAX_FILE_SIZE_MB ?? 1024),
   largeFileThresholdMb: Number(env.VITE_LARGE_FILE_THRESHOLD_MB ?? 20),
   chunkSizeMb: Number(env.VITE_CHUNK_SIZE_MB ?? 5),

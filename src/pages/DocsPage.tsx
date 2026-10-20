@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Shield } from 'lucide-react';
 
-const BASE = 'https://your-domain.com';
+const BASE = window.location.origin;
 
 export default function DocsPage() {
   return (
@@ -60,6 +60,9 @@ export default function DocsPage() {
           <h2 className="mb-4 text-2xl font-semibold tracking-tight text-white">API basics</h2>
           <p className="text-sm leading-6 text-[#aaa]">
             All endpoints are served under <code className="rounded border border-[#333] bg-[#151515] px-1.5 py-0.5 font-mono text-xs text-[#ddd]">{BASE}/api/v1</code> and return JSON unless an endpoint streams file content.
+          </p>
+          <p className="mt-3 text-sm leading-6 text-[#aaa]">
+            Core API requests use this app's same-origin proxy. File-byte transfers use direct backend URLs with short-lived, upload-scoped tokens so large uploads do not pass through serverless request limits.
           </p>
         </section>
 

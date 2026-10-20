@@ -12,15 +12,27 @@ import { formatBytes } from '../../utils/format';
 import { config } from '../../config';
 import toast from 'react-hot-toast';
 
-async function uploadChunkWithRetry(uploadId: string, index: number, chunk: Blob, signal: AbortSignal): Promise<void> {
+async function uploadChunkWithRetry(
+  uploadId: string,
+  index: number,
+  chunk: Blob,
+  signal: AbortSignal,
+  credentials: { url: string; token: string },
+): Promise<void> {
   for (let attempt = 0; ; attempt++) {
     try {
-      await uploadChunk(uploadId, index, chunk, signal);
+      await uploadChunk(credentials.url, credentials.token, index, chunk, signal);
       return;
     } catch (error) {
       if (signal.aborted || attempt >= config.uploadMaxRetries) throw error;
-      const status = (error as { response?: { status?: number } }).response?.status;
-      if (status && status < 500 && status !== 403 && status !== 429) throw error;
+      const errorStatus = (error as { response?: { status?: number } }).response?.status;
+      if (errorStatus === 401) {
+        const refreshed = await getResumableUploadStatus(uploadId);
+        credentials.url = refreshed.chunkUploadUrl;
+        credentials.token = refreshed.chunkUploadToken;
+        continue;
+      }
+      if (errorStatus && errorStatus < 500 && errorStatus !== 403 && errorStatus !== 429) throw error;
       await waitForRetry(1000 * 2 ** attempt, signal);
     }
   }
@@ -156,6 +168,7 @@ export default function UploadPage() {
         patch(item.id, { phase: 'uploading', progress: 0, uploadId, fileId: created.fileId, chunkSize, totalChunks });
       }
       const status = await getResumableUploadStatus(uploadId);
+      const chunkCredentials = { url: status.chunkUploadUrl, token: status.chunkUploadToken };
       if (item.file.size !== status.fileSize) throw new Error('Selected file size does not match this upload session');
       for (const uploadedChunk of status.chunks) {
         const start = uploadedChunk.chunkIndex * status.chunkSize;
@@ -186,7 +199,7 @@ export default function UploadPage() {
           }
           const start = index * size;
           const chunk = item.file.slice(start, Math.min(start + size, item.file.size));
-          await uploadChunkWithRetry(uploadId!, index, chunk, ctrl.signal);
+          await uploadChunkWithRetry(uploadId!, index, chunk, ctrl.signal, chunkCredentials);
           uploaded.add(index);
           uploadedBytes += chunk.size;
           const elapsedSeconds = Math.max((Date.now() - uploadStartedAt) / 1000, 0.001);

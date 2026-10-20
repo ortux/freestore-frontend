@@ -110,6 +110,8 @@ export interface ResumableUpload {
   originalFilename: string;
   fileSize: number;
   status: string;
+  chunkUploadUrl: string;
+  chunkUploadToken: string;
 }
 
 export interface ResumableUploadStatus {
@@ -124,6 +126,8 @@ export interface ResumableUploadStatus {
   uploadedBytes: number;
   chunks: Array<{ chunkIndex: number; originalSize: number; checksum: string }>;
   expiresAt: string;
+  chunkUploadUrl: string;
+  chunkUploadToken: string;
 }
 
 export async function createUpload(file: File, folderId: string | null = null): Promise<ResumableUpload> {
@@ -133,7 +137,11 @@ export async function createUpload(file: File, folderId: string | null = null): 
     fileSize: file.size,
     folderId,
   });
-  return data.data.upload;
+  return {
+    ...data.data.upload,
+    chunkUploadUrl: data.data.chunkUploadUrl,
+    chunkUploadToken: data.data.chunkUploadToken,
+  };
 }
 
 export async function getResumableUploadStatus(uploadId: string): Promise<ResumableUploadStatus> {
@@ -160,15 +168,19 @@ export async function listResumableUploads(): Promise<ResumableUploadSession[]> 
 }
 
 export async function uploadChunk(
-  uploadId: string,
+  chunkUploadUrl: string,
+  token: string,
   index: number,
   chunk: Blob,
   signal?: AbortSignal,
 ): Promise<void> {
-  await axios.put(`/api/v1/uploads/${uploadId}/chunks/${index}`, chunk, {
-    headers: { 'Content-Type': 'application/octet-stream' },
+  await axios.put(`${chunkUploadUrl}/${index}`, chunk, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/octet-stream',
+    },
     signal,
-    withCredentials: true,
+    withCredentials: false,
   });
 }
 
