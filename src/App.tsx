@@ -16,6 +16,7 @@ import RepositoryPage  from './pages/dashboard/RepositoryPage';
 import StoragePage     from './pages/dashboard/StoragePage';
 import SettingsPage    from './pages/dashboard/SettingsPage';
 import PublicSharePage from './pages/PublicSharePage';
+import AuthCallbackPage from './pages/AuthCallbackPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { data: user, isLoading, isError } = useUser();
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/docs"  element={<DocsPage />} />
         <Route path="/share/:token" element={<PublicSharePage />} />
+        <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
         <Route
           path="/dashboard"

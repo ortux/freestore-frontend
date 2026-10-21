@@ -7,9 +7,13 @@ export default function LoginPage() {
   const { data: user, isLoading } = useUser();
 
   const error = new URLSearchParams(window.location.search).get('error');
-  const errorMessage = error === 'github_oauth_failed'
-    ? 'GitHub sign-in could not be completed. Please check the OAuth app configuration and try again.'
-    : error ? 'Authentication failed. Please try again.' : null;
+  const errorMessage =
+    error === 'github_oauth_failed' ? 'GitHub sign-in could not be completed. Please check the OAuth app configuration and try again.' :
+    error === 'token_expired'       ? 'Sign-in session expired. Please try again.' :
+    error === 'exchange_failed'     ? 'Sign-in could not be completed. Please try again.' :
+    error === 'no_token'            ? 'Invalid sign-in link. Please try again.' :
+    error                           ? 'Authentication failed. Please try again.' :
+    null;
 
   // Already authenticated — send straight to dashboard
   if (isLoading) {

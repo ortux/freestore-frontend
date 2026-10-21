@@ -43,7 +43,11 @@ module.exports = async function handler(req, res) {
   }
 
   const requestUrl = new URL(req.url || '/', 'https://proxy.invalid');
-  if (!requestUrl.pathname.startsWith('/api/v1/')) {
+  const isApiPath  = requestUrl.pathname.startsWith('/api/v1/');
+  const isAuthPath = requestUrl.pathname.startsWith('/auth/') &&
+    ['/auth/exchange', '/auth/logout', '/auth/me'].includes(requestUrl.pathname);
+
+  if (!isApiPath && !isAuthPath) {
     res.status(404).json({ error: 'API route not found' });
     return;
   }

@@ -5,8 +5,24 @@
       "destination": "/api/:path*"
     },
     {
-      "source": "/auth/:path*",
-      "destination": "https://api.pramaniktoursandtravels.com/auth/:path*"
+      "source": "/auth/exchange",
+      "destination": "/api/auth/exchange"
+    },
+    {
+      "source": "/auth/logout",
+      "destination": "/api/auth/logout"
+    },
+    {
+      "source": "/auth/me",
+      "destination": "/api/auth/me"
+    },
+    {
+      "source": "/auth/github",
+      "destination": "https://api.pramaniktoursandtravels.com/auth/github"
+    },
+    {
+      "source": "/auth/github/callback",
+      "destination": "https://api.pramaniktoursandtravels.com/auth/github/callback"
     },
     {
       "source": "/(.*)",
