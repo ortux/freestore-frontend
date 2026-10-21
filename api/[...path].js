@@ -43,14 +43,26 @@ module.exports = async function handler(req, res) {
   }
 
   const requestUrl = new URL(req.url || '/', 'https://proxy.invalid');
-  const isApiPath  = requestUrl.pathname.startsWith('/api/v1/');
-  const isAuthPath = requestUrl.pathname.startsWith('/auth/') &&
-    ['/auth/exchange', '/auth/logout', '/auth/me'].includes(requestUrl.pathname);
+  const isVersionedApiPath = requestUrl.pathname.startsWith('/api/v1/');
+  const isRewrittenApiPath = requestUrl.pathname.startsWith('/api/') &&
+    !requestUrl.pathname.startsWith('/api/auth/');
+  const isApiPath = isVersionedApiPath || isRewrittenApiPath;
+  const normalizedAuthPath = requestUrl.pathname.startsWith('/api/auth/')
+    ? requestUrl.pathname.slice('/api'.length)
+    : requestUrl.pathname;
+  const isAuthPath = normalizedAuthPath.startsWith('/auth/') &&
+    ['/auth/exchange', '/auth/logout', '/auth/me'].includes(normalizedAuthPath);
 
   if (!isApiPath && !isAuthPath) {
     res.status(404).json({ error: 'API route not found' });
     return;
   }
+
+  const backendPath = isVersionedApiPath
+    ? requestUrl.pathname
+    : isRewrittenApiPath
+      ? `/api/v1/${requestUrl.pathname.slice('/api/'.length)}`
+      : normalizedAuthPath;
 
   const headers = new Headers();
   for (const [name, value] of Object.entries(req.headers)) {
@@ -62,7 +74,7 @@ module.exports = async function handler(req, res) {
   headers.set('x-forwarded-host', req.headers.host || '');
   headers.set('x-forwarded-proto', process.env.NODE_ENV === 'production' ? 'https' : 'http');
 
-  const target = new URL(`${requestUrl.pathname}${requestUrl.search}`, origin);
+  const target = new URL(`${backendPath}${requestUrl.search}`, origin);
   try {
     const upstream = await fetch(target, {
       method: req.method,
