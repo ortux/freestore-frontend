@@ -1,20 +1,24 @@
 {
   "rewrites": [
     {
+      "source": "/api/v1",
+      "destination": "/api/proxy?__proxy_target=/api/v1"
+    },
+    {
       "source": "/api/v1/:path*",
-      "destination": "/api/:path*"
+      "destination": "/api/proxy?__proxy_target=/api/v1/:path*"
     },
     {
       "source": "/auth/exchange",
-      "destination": "/api/auth/exchange"
+      "destination": "/api/proxy?__proxy_target=/auth/exchange"
     },
     {
       "source": "/auth/logout",
-      "destination": "/api/auth/logout"
+      "destination": "/api/proxy?__proxy_target=/auth/logout"
     },
     {
       "source": "/auth/me",
-      "destination": "/api/auth/me"
+      "destination": "/api/proxy?__proxy_target=/auth/me"
     },
     {
       "source": "/auth/github",
