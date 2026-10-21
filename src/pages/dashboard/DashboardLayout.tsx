@@ -4,6 +4,7 @@ import {
   LayoutDashboard, Files, Upload, Share2, Users,
   Key, Github, Database, Settings, LogOut,
   Shield, Menu, ChevronRight,
+  FlaskConical,
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '../../hooks/useUser';
@@ -18,6 +19,7 @@ const NAV = [
   { to: '/dashboard/shared',     icon: Share2,          label: 'Shared' },
   { to: '/dashboard/workspaces', icon: Users,           label: 'Workspaces' },
   { to: '/dashboard/api',        icon: Key,             label: 'API Keys' },
+  { to: '/dashboard/sandbox',    icon: FlaskConical,    label: 'API Sandbox' },
   { to: '/dashboard/repository', icon: Github,          label: 'Repository' },
   { to: '/dashboard/storage',    icon: Database,        label: 'Storage' },
   { to: '/dashboard/settings',   icon: Settings,        label: 'Settings' },

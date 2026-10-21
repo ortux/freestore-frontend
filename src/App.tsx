@@ -15,6 +15,7 @@ import ApiPage         from './pages/dashboard/ApiPage';
 import RepositoryPage  from './pages/dashboard/RepositoryPage';
 import StoragePage     from './pages/dashboard/StoragePage';
 import SettingsPage    from './pages/dashboard/SettingsPage';
+import SandboxPage    from './pages/dashboard/SandboxPage';
 import PublicSharePage from './pages/PublicSharePage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 
@@ -64,6 +65,7 @@ export default function App() {
           <Route path="shared"        element={<SharedPage />} />
           <Route path="workspaces"    element={<WorkspacesPage />} />
           <Route path="api"           element={<ApiPage />} />
+          <Route path="sandbox"       element={<SandboxPage />} />
           <Route path="repository"    element={<RepositoryPage />} />
           <Route path="storage"       element={<StoragePage />} />
           <Route path="settings"      element={<SettingsPage />} />
