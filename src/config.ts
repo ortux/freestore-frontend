@@ -1,9 +1,14 @@
 const env = import.meta.env;
-const apiBaseUrl = '/api/v1';
+
+// All API and auth calls use relative paths so they go through Vercel's own
+// domain (proxied by api/[...path].js and vercel.json rewrites).
+// In local dev the Vite proxy handles the same paths.
+const apiBaseUrl  = '/api/v1';
+const authBaseUrl = '';
 
 export const config = {
   apiBaseUrl,
-  authBaseUrl: '',
+  authBaseUrl,
   githubLoginUrl: '/auth/github',
   maxFileSizeMb: Number(env.VITE_MAX_FILE_SIZE_MB ?? 1024),
   largeFileThresholdMb: Number(env.VITE_LARGE_FILE_THRESHOLD_MB ?? 20),

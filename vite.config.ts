@@ -37,6 +37,19 @@ export default defineConfig(({ mode }) => {
         '/auth': {
           target: apiTarget,
           changeOrigin: true,
+          configure: (proxy) => {
+            if (sandboxEnabled) {
+              proxy.on('proxyReq', (proxyReq) => {
+                proxyReq.setHeader('authorization', 'Bearer sk_test_sandbox');
+              });
+            } else if (env.PROXY_SHARED_SECRET) {
+              proxy.on('proxyReq', (proxyReq, req) => {
+                proxyReq.setHeader('x-proxy-secret', env.PROXY_SHARED_SECRET);
+                proxyReq.setHeader('x-forwarded-host', req.headers.host || '');
+                proxyReq.setHeader('x-forwarded-proto', 'http');
+              });
+            }
+          },
         },
       },
     },

@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/v1/:path*",
+      "destination": "/api/:path*"
+    },
+    {
       "source": "/auth/:path*",
       "destination": "https://api.pramaniktoursandtravels.com/auth/:path*"
     },

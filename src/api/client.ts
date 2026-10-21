@@ -13,11 +13,24 @@ export const authApi = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+/**
+ * Redirect to /login on 401, but only when we are not already on the login
+ * page.  Without this guard, the auth-check that LoginPage itself triggers
+ * (to decide whether to redirect to /dashboard) would fire a 401, the
+ * interceptor would push /login again, and the whole page would reload in an
+ * infinite loop.
+ */
+function redirectToLoginIfNeeded(): void {
+  if (window.location.pathname !== '/login') {
+    window.location.href = '/login';
+  }
+}
+
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      window.location.href = '/login';
+      redirectToLoginIfNeeded();
     }
     return Promise.reject(err);
   }
@@ -27,7 +40,7 @@ authApi.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      window.location.href = '/login';
+      redirectToLoginIfNeeded();
     }
     return Promise.reject(err);
   }

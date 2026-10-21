@@ -1,12 +1,28 @@
 import { Github, Shield } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { config } from '../config';
+import { useUser } from '../hooks/useUser';
 
 export default function LoginPage() {
+  const { data: user, isLoading } = useUser();
+
   const error = new URLSearchParams(window.location.search).get('error');
   const errorMessage = error === 'github_oauth_failed'
     ? 'GitHub sign-in could not be completed. Please check the OAuth app configuration and try again.'
     : error ? 'Authentication failed. Please try again.' : null;
+
+  // Already authenticated — send straight to dashboard
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">

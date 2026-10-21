@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from './hooks/useUser';
 
 import LandingPage     from './pages/LandingPage';
@@ -18,6 +19,7 @@ import PublicSharePage from './pages/PublicSharePage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { data: user, isLoading, isError } = useUser();
+  const queryClient = useQueryClient();
 
   if (isLoading) {
     return (
@@ -28,6 +30,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (isError || !user) {
+    // Clear all cached queries before redirecting so no stale data is shown
+    // if the user logs back in (or a different user logs in) in the same tab.
+    queryClient.clear();
     return <Navigate to="/login" replace />;
   }
 

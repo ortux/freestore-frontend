@@ -1,5 +1,7 @@
 interface ImportMetaEnv {
   readonly VITE_API_SANDBOX?: string;
+  readonly VITE_API_BASE_URL?: string;
+  readonly VITE_AUTH_BASE_URL?: string;
   readonly VITE_MAX_FILE_SIZE_MB?: string;
   readonly VITE_LARGE_FILE_THRESHOLD_MB?: string;
   readonly VITE_CHUNK_SIZE_MB?: string;
