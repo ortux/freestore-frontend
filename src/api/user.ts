@@ -17,6 +17,18 @@ export interface Repository {
   size?: number;
   visibility: string;
   encryption: string;
+  storageRepositories?: StorageRepository[];
+}
+
+export interface StorageRepository {
+  id: string;
+  name: string;
+  owner: string;
+  url: string;
+  usedBytes: number;
+  maxBytes: number;
+  status: 'ACTIVE' | 'FULL';
+  isPrimary: boolean;
 }
 
 export async function getUser(): Promise<UserProfile> {

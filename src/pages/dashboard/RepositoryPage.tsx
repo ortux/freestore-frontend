@@ -65,6 +65,53 @@ export default function RepositoryPage() {
             </div>
           </div>
 
+          {!!repo.storageRepositories?.length && (
+            <div className="card p-5 space-y-4">
+              <div>
+                <p className="text-xs font-semibold text-[#888]">Storage repositories</p>
+                <p className="mt-1 text-[10px] text-[#555]">
+                  New repositories are created automatically as a repository approaches its storage target.
+                </p>
+              </div>
+              <div className="space-y-3">
+                {repo.storageRepositories.map((storageRepo) => {
+                  const percent = Math.min(100, Math.round((storageRepo.usedBytes / storageRepo.maxBytes) * 100));
+                  return (
+                    <div key={storageRepo.id} className="rounded-md border border-[#222] bg-[#0a0a0a] p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <a
+                          href={storageRepo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 font-mono text-xs text-[#ccc] hover:text-white"
+                        >
+                          {storageRepo.owner}/{storageRepo.name}
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                        <span className={`badge ${storageRepo.status === 'FULL' ? 'badge-amber' : 'badge-green'}`}>
+                          {storageRepo.status === 'FULL' ? 'Rotated' : 'Active'}
+                        </span>
+                      </div>
+                      <div className="mt-3 flex items-center justify-between text-[10px] text-[#666]">
+                        <span>Estimated committed storage</span>
+                        <span>{formatBytes(storageRepo.usedBytes)} / {formatBytes(storageRepo.maxBytes)}</span>
+                      </div>
+                      <div className="progress-track mt-1.5 h-1">
+                        <div
+                          className={`progress-fill ${storageRepo.status === 'FULL' ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-[10px] leading-relaxed text-[#555]">
+                Estimates are cumulative because GitHub retains deleted content in repository history. GitHub account limits still apply.
+              </p>
+            </div>
+          )}
+
           {/* Privacy model */}
           <div className="card p-5">
             <p className="text-xs font-semibold text-[#888] mb-3">Privacy model</p>
