@@ -21,7 +21,7 @@ export const authApi = axios.create({
  * infinite loop.
  */
 function redirectToLoginIfNeeded(): void {
-  if (window.location.pathname !== '/login') {
+  if (window.location.pathname !== '/login' && window.location.pathname !== '/auth/callback') {
     window.location.href = '/login';
   }
 }

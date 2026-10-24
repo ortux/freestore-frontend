@@ -34,6 +34,9 @@ export default function AuthCallbackPage() {
     const params = new URLSearchParams(window.location.search);
     const token  = params.get('token');
 
+    // Keep one-time credentials out of browser history and later referrers.
+    window.history.replaceState(null, '', window.location.pathname);
+
     if (!token) {
       navigate('/login?error=no_token', { replace: true });
       return;
@@ -49,6 +52,17 @@ export default function AuthCallbackPage() {
       })
       .catch((err) => {
         const status = err?.response?.status;
+        if (!status) {
+          // The exchange may have succeeded while its response was lost.
+          // Check whether the session cookie was established before failing.
+          authApi.get<{ success: boolean; data: UserProfile }>('/auth/me')
+            .then(({ data }) => {
+              queryClient.setQueryData(['user'], data.data);
+              navigate('/dashboard', { replace: true });
+            })
+            .catch(() => navigate('/login?error=exchange_failed', { replace: true }));
+          return;
+        }
         const code   = status === 401 ? 'token_expired' : 'exchange_failed';
         navigate(`/login?error=${code}`, { replace: true });
       });

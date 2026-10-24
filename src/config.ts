@@ -1,15 +1,17 @@
 const env = import.meta.env;
 
-// All API and auth calls use relative paths so they go through Vercel's own
-// domain (proxied by api/[...path].js and vercel.json rewrites).
-// In local dev the Vite proxy handles the same paths.
+// API calls and the session exchange stay same-origin. OAuth navigation starts
+// on the backend so the backend can keep the provider session and callback.
 const apiBaseUrl  = '/api/v1';
 const authBaseUrl = '';
+const oauthBackendUrl = String(
+  env.VITE_AUTH_BASE_URL ?? (env.PROD ? 'https://api.pramaniktoursandtravels.com' : ''),
+).replace(/\/+$/, '');
 
 export const config = {
   apiBaseUrl,
   authBaseUrl,
-  githubLoginUrl: '/auth/github',
+  githubLoginUrl: `${oauthBackendUrl}/auth/github`,
   maxFileSizeMb: Number(env.VITE_MAX_FILE_SIZE_MB ?? 1024),
   largeFileThresholdMb: Number(env.VITE_LARGE_FILE_THRESHOLD_MB ?? 20),
   chunkSizeMb: Number(env.VITE_CHUNK_SIZE_MB ?? 5),
