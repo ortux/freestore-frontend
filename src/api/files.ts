@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { api } from './client';
+import { config } from '../config';
 
 export interface FileRecord {
   id: string;
@@ -297,9 +298,9 @@ export async function renameFile(id: string, filename: string): Promise<FileReco
 // ── URL helpers ───────────────────────────────────────────────────────────────
 
 export function getImageUrl(id: string): string {
-  return `/api/v1/images/${id}`;
+  return `${config.apiBaseUrl}/images/${id}`;
 }
 
 export function getDownloadUrl(id: string): string {
-  return `/api/v1/files/${id}`;
+  return `${config.apiBaseUrl}/files/${id}`;
 }

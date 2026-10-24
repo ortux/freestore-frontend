@@ -1,17 +1,14 @@
 const env = import.meta.env;
 
-// API calls and the session exchange stay same-origin. OAuth navigation starts
-// on the backend so the backend can keep the provider session and callback.
-const apiBaseUrl  = '/api/v1';
-const authBaseUrl = '';
-const oauthBackendUrl = String(
-  env.VITE_AUTH_BASE_URL ?? (env.PROD ? 'https://api.pramaniktoursandtravels.com' : ''),
-).replace(/\/+$/, '');
+const apiOrigin = env.PROD ? 'https://apif.omrudra.tech' : '';
+const apiBaseUrl = apiOrigin ? `${apiOrigin}/api/v1` : '/api/v1';
+const authBaseUrl = apiOrigin;
 
 export const config = {
+  apiOrigin,
   apiBaseUrl,
   authBaseUrl,
-  githubLoginUrl: `${oauthBackendUrl}/auth/github`,
+  githubLoginUrl: `${apiOrigin}/auth/github`,
   maxFileSizeMb: Number(env.VITE_MAX_FILE_SIZE_MB ?? 1024),
   largeFileThresholdMb: Number(env.VITE_LARGE_FILE_THRESHOLD_MB ?? 20),
   chunkSizeMb: Number(env.VITE_CHUNK_SIZE_MB ?? 5),

@@ -1,3 +1,5 @@
+import { config } from '../config';
+
 export function formatBytes(bytes: number): string {
   if (!bytes || bytes === 0) return '0 B';
   const k = 1024;
@@ -29,11 +31,11 @@ export function isImage(mimeType: string): boolean {
 }
 
 export function getImageUrl(id: string): string {
-  return `/api/v1/images/${id}`;
+  return `${config.apiBaseUrl}/images/${id}`;
 }
 
 export function getDownloadUrl(id: string): string {
-  return `/api/v1/files/${id}`;
+  return `${config.apiBaseUrl}/files/${id}`;
 }
 
 export function mimeToExt(mimeType: string): string {

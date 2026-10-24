@@ -10,9 +10,9 @@ import type { UserProfile } from '../api/user';
  *
  * Flow:
  *   1. Backend redirects here after GitHub OAuth with ?token=<one-time-token>
- *   2. We POST the token to /auth/exchange through the Vercel same-origin proxy
+ *   2. We POST the token to /auth/exchange on the configured API service
  *   3. The backend validates the token, calls req.logIn(), and sets the session
- *      cookie — the browser receives it as same-origin (vercel.app domain)
+ *      cookie for the API service
  *   4. We prime the React Query cache with the returned user profile and
  *      navigate to /dashboard without any extra round-trips
  *

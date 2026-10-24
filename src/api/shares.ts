@@ -1,4 +1,5 @@
 import { api } from './client';
+import { config } from '../config';
 
 export type SharePermission = 'VIEW' | 'EDIT' | 'MANAGE';
 
@@ -50,7 +51,7 @@ export async function getPublicFile(token: string): Promise<PublicFileMetadata> 
 }
 
 export function getPublicFileContentUrl(token: string): string {
-  return `/api/v1/public-links/${encodeURIComponent(token)}/content`;
+  return `${config.apiBaseUrl}/public-links/${encodeURIComponent(token)}/content`;
 }
 
 export async function listSharedByMe(): Promise<FileShare[]> {
