@@ -22,11 +22,11 @@
     },
     {
       "source": "/auth/github",
-      "destination": "https://api.pramaniktoursandtravels.com/auth/github"
+      "destination": "https://apif.omrudra.tech/auth/github"
     },
     {
       "source": "/auth/github/callback",
-      "destination": "https://api.pramaniktoursandtravels.com/auth/github/callback"
+      "destination": "https://apif.omrudra.tech/auth/github/callback"
     },
     {
       "source": "/(.*)",

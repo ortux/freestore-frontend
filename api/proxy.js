@@ -49,7 +49,7 @@ function resolveTarget(req, origin) {
 }
 
 module.exports = async function handler(req, res) {
-  const backendOrigin = process.env.BACKEND_ORIGIN;
+  const backendOrigin = process.env.BACKEND_ORIGIN || 'https://apif.omrudra.tech';
   const proxySecret = process.env.PROXY_SHARED_SECRET;
   if (!backendOrigin || !proxySecret) {
     res.status(503).json({ error: 'API proxy is not configured' });

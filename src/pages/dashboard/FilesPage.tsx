@@ -17,7 +17,6 @@ import {
 } from '../../hooks/useShares';
 import { getImageUrl, getDownloadUrl, type FileRecord, type FolderRecord } from '../../api/files';
 import { api } from '../../api/client';
-import { config } from '../../config';
 import { formatBytes, formatDate, isImage } from '../../utils/format';
 import { Modal } from '../../components/ui/Modal';
 import { Avatar } from '../../components/ui/Avatar';
@@ -211,7 +210,7 @@ export default function FilesPage() {
 
   const copyUrl = async (id: string) => {
     try {
-      await navigator.clipboard.writeText(`${config.apiBaseUrl}/images/${id}`);
+      await navigator.clipboard.writeText(`${window.location.origin}/api/v1/images/${id}`);
       toast.success('Public image URL copied');
     } catch {
       toast.error('Unable to copy URL');

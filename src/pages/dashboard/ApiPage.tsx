@@ -6,11 +6,9 @@ import { Modal } from '../../components/ui/Modal';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { SkeletonRow } from '../../components/ui/Skeleton';
 import { formatDate } from '../../utils/format';
-import { config } from '../../config';
 import toast from 'react-hot-toast';
 
 export default function ApiPage() {
-  const apiOrigin = config.apiOrigin || window.location.origin;
   const qc = useQueryClient();
   const [showCreate,  setShowCreate]  = useState(false);
   const [newName,     setNewName]     = useState('');
@@ -158,8 +156,8 @@ export default function ApiPage() {
           <Terminal className="w-3.5 h-3.5 text-[#555]" />
           <span className="text-xs font-semibold text-[#888]">Usage</span>
         </div>
-        <pre className="code-block">{`# Upload a file through the Free Store API
-curl -X POST ${apiOrigin}/api/v1/uploads/initiate \\
+        <pre className="code-block">{`# Upload a file through the application proxy
+curl -X POST ${window.location.origin}/api/v1/uploads/initiate \\
   -H "Authorization: Bearer sk_live_xxxx" \\
   -H "Content-Type: application/json" \\
   -d '{"filename":"photo.png","mimeType":"image/png","fileSize":183920}'
@@ -171,7 +169,7 @@ curl -X PUT <uploadUrl> \\
   --data-binary @photo.png
 
 # List files
-curl ${apiOrigin}/api/v1/files \\
+curl ${window.location.origin}/api/v1/files \\
   -H "Authorization: Bearer sk_live_xxxx"`}
         </pre>
       </div>

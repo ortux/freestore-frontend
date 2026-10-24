@@ -10,9 +10,9 @@ import type { UserProfile } from '../api/user';
  *
  * Flow:
  *   1. Backend redirects here after GitHub OAuth with ?token=<one-time-token>
- *   2. We POST the token to /auth/exchange on the configured API service
+ *   2. We POST the token to /auth/exchange through the application proxy
  *   3. The backend validates the token, calls req.logIn(), and sets the session
- *      cookie for the API service
+ *      cookie on the application origin
  *   4. We prime the React Query cache with the returned user profile and
  *      navigate to /dashboard without any extra round-trips
  *
